@@ -7,6 +7,7 @@ import { formatDate, money, num } from "../lib/values.js";
 const ORDER_FACTS = [
   ["门店", "门店"],
   ["Payment", "支付方式"],
+  ["Pieces", "商品件数"],
   ["Goods total", "商品总额"],
   ["Packaging", "包装费"],
   ["Delivery", "配送费"],
@@ -59,7 +60,6 @@ function Orders({ orders, orderProducts }) {
           const expanded = open.has(row.id);
           const paid = money(row.fields["实付金额"]);
           const date = formatDate(row.fields["下单时间"]);
-          const pieces = num(row.fields["商品件数"]);
           const itemsTotal = row.items.reduce((sum, item) => sum + (num(item.fields["小计"]) ?? 0), 0);
 
           return (
@@ -69,7 +69,7 @@ function Orders({ orders, orderProducts }) {
                   <span className="order-no">{row.key}</span>
                   <span className="order-sub">
                     {date ?? "no date"}
-                    {pieces !== null && ` · ${pieces} items`}
+                    {` · ${row.items.length} line${row.items.length === 1 ? "" : "s"}`}
                     {row.planned && " · planned"}
                   </span>
                 </span>
