@@ -789,6 +789,18 @@ textarea.input {
 
 /* --- wider screens -------------------------------------------------------- */
 
+/* On phones the four tabs are made to share the row rather than scroll, so no
+   section can end up hidden off the right edge. */
+@media (max-width: 559px) {
+  .tab {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0 10px;
+    font-size: 14px;
+    text-align: center;
+  }
+}
+
 @media (min-width: 560px) {
   .row-name {
     flex: 1 1 auto;
