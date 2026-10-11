@@ -48,11 +48,14 @@ export function useBase() {
  */
 export function useLocalState(key, initialValue) {
   const [value, setValue] = useState(() => {
+    // initialValue may be a function, which keeps callers from rebuilding the
+    // default (e.g. a date-stamped plan name) on every render.
+    const fallback = typeof initialValue === "function" ? initialValue() : initialValue;
     try {
       const raw = window.localStorage.getItem(key);
-      return raw === null ? initialValue : JSON.parse(raw);
+      return raw === null ? fallback : JSON.parse(raw);
     } catch {
-      return initialValue;
+      return fallback;
     }
   });
 
