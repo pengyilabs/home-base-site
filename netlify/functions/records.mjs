@@ -1,13 +1,25 @@
 // Reads records from the Feishu Base through the OpenAPI, so the browser never
 // needs Feishu credentials or a Feishu account.
 //
-//   GET /api/records            -> list tables [{ id, name }]
-//   GET /api/records?table=xxx  -> list records for that table
+//   GET /api/records            -> the tables this site is allowed to expose
+//   GET /api/records?table=key  -> records for one of those tables
+//
+// Only the tables in ALLOWED are reachable. Everything else in the Base
+// (vaccinations, pet records, expenses, ...) is deliberately not exposed to the
+// public site, so this list is the security boundary — not a filter.
 
 const API = "https://open.feishu.cn/open-apis";
 const APP_ID = process.env.FEISHU_APP_ID;
 const APP_SECRET = process.env.FEISHU_APP_SECRET;
 const BASE_TOKEN = process.env.FEISHU_BASE_TOKEN;
+
+// Public allowlist. The key is what the browser asks for; the id is the
+// Feishu table it maps to. Adding a table here makes it world-readable.
+const ALLOWED = {
+  products: { id: "tblXMVegHFLeL3UR", name: "商品清单 (Productos)" },
+  orders: { id: "tblkG8JSvW6U0jp3", name: "购买记录 (Orders)" },
+  orderProducts: { id: "tblbXb5pDQeo3j9a", name: "订单商品 (Order Products)" },
+};
 
 // tenant_access_token lives ~2h; reuse it across warm invocations.
 let cachedToken = null;
@@ -88,11 +100,18 @@ export default async (req) => {
       return json({ error: "Missing FEISHU_APP_ID / FEISHU_APP_SECRET / FEISHU_BASE_TOKEN" }, { status: 500 });
     }
 
-    const table = new URL(req.url).searchParams.get("table");
+    const requested = new URL(req.url).searchParams.get("table");
 
-    if (!table) {
-      const { items } = await lark(`/bitable/v1/apps/${BASE_TOKEN}/tables?page_size=100`);
-      return json(items.map((t) => ({ id: t.table_id, name: t.name })));
+    if (!requested) {
+      return json(
+        Object.entries(ALLOWED).map(([key, table]) => ({ key, id: table.id, name: table.name }))
+      );
+    }
+
+    const entry =
+      ALLOWED[requested] ?? Object.values(ALLOWED).find((table) => table.id === requested);
+    if (!entry) {
+      return json({ error: `Table not exposed by this site: ${requested}` }, { status: 404 });
     }
 
     const records = [];
@@ -100,7 +119,7 @@ export default async (req) => {
     do {
       const params = new URLSearchParams({ page_size: "500" });
       if (pageToken) params.set("page_token", pageToken);
-      const page = await lark(`/bitable/v1/apps/${BASE_TOKEN}/tables/${table}/records?${params}`);
+      const page = await lark(`/bitable/v1/apps/${BASE_TOKEN}/tables/${entry.id}/records?${params}`);
       records.push(...(page.items ?? []).map(normalizeRecord));
       pageToken = page.has_more ? page.page_token : "";
     } while (pageToken);
