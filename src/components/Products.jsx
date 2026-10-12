@@ -1,11 +1,12 @@
 import { useMemo, useState } from "react";
 import {
-  imageUrl,
   money,
+  productImage,
   productName,
   productNameEs,
   productNameZh,
   storage,
+  thumbUrl,
 } from "../lib/values.js";
 
 const STORAGE_TONE = { 常温: "ambient", 冷藏: "chilled", 冷冻: "frozen" };
@@ -107,7 +108,7 @@ function Products({ products }) {
       <div className="cards">
         {visible.map((record) => {
           const f = record.fields;
-          const image = imageUrl(f["图片"]);
+          const image = thumbUrl(productImage(f));
           const title = productName(f);
           const zh = productNameZh(f);
           const es = productNameEs(f);

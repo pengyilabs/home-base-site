@@ -37,7 +37,9 @@ export default async (req) => {
     return new Response(upstream.body, {
       headers: {
         "Content-Type": upstream.headers.get("content-type") ?? "application/octet-stream",
-        "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
+        // file_token is content-addressed (a file never changes), so both the
+        // browser and Netlify's Image CDN can cache the bytes effectively forever.
+        "Cache-Control": "public, max-age=31536000, immutable",
       },
     });
   } catch (err) {

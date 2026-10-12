@@ -55,6 +55,17 @@ export function imageUrl(value) {
   return first?.url ?? null;
 }
 
+/** Cropped product photo when present, otherwise the original screenshot. */
+export function productImage(fields) {
+  return imageUrl(fields["产品图"] ?? fields["图片"]);
+}
+
+/** Route a media path through Netlify's Image CDN for a small square thumbnail. */
+export function thumbUrl(url, size = 160) {
+  if (!url) return null;
+  return `/.netlify/images?url=${encodeURIComponent(url)}&w=${size}&h=${size}&fit=cover&position=top&q=78`;
+}
+
 /** Normalised storage value (常温 / 冷藏 / 冷冻) or null. */
 export function storage(fields) {
   const value = fields["存储方式"];
