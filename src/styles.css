@@ -1,14 +1,41 @@
+/* ================================================================
+   Home Base — Fields of Mistria inspired skin
+   Warm parchment palette, pixel-art panels, hand-crafted decorations
+   ================================================================ */
+
 :root {
-  --bg: #101117;
-  --panel: #191b23;
-  --panel-2: #21242f;
-  --border: #2b2f3d;
-  --text: #e8eaf1;
-  --muted: #8d95ab;
-  --accent: #7aa2f7;
-  --accent-ink: #0c1220;
-  --danger: #e2726e;
-  --radius: 14px;
+  /* parchment & wood */
+  --bg: #f5e6c8;
+  --bg-deep: #e8d5b8;
+  --panel: #f0dcc4;
+  --panel-raised: #f7eeda;
+  --panel-slot: #e5cdb0;
+  --border: #8b6b52;
+  --border-light: #c4a484;
+  --border-dark: #5c3d2e;
+  --ink: #3d2b1f;
+  --ink-soft: #6b4c3b;
+  --ink-faint: #a0856c;
+  /* accents */
+  --accent: #c89b6a;
+  --accent-hover: #b8875a;
+  --accent-deep: #8b6b52;
+  --accent-glow: #e8c89a;
+  /* semantic */
+  --green: #6a9c5a;
+  --green-soft: #a4c894;
+  --red: #c25e5e;
+  --blue: #6888b0;
+  --purple: #8b6baa;
+  --amber: #c8963a;
+  /* shadow */
+  --shadow-pixel: 2px 2px 0 0 rgba(60, 40, 30, 0.25);
+  --shadow-panel: 3px 3px 0 0 rgba(60, 40, 30, 0.18);
+  --shadow-inset: inset 1px 1px 0 rgba(255, 255, 255, 0.35), inset -1px -1px 0 rgba(60, 40, 30, 0.12);
+  /* typography */
+  --font-pixel: "Press Start 2P", monospace;
+  --font-body: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+  --radius-pixel: 4px;
 }
 
 * {
@@ -17,15 +44,22 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
   background: var(--bg);
-  color: var(--text);
-  font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
-    "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: var(--ink);
+  font: 15px/1.55 var(--font-body);
+  /* subtle parchment texture via repeating gradient */
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(139, 107, 82, 0.025) 3px, rgba(139, 107, 82, 0.025) 4px),
+    repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(139, 107, 82, 0.018) 3px, rgba(139, 107, 82, 0.018) 4px);
+  background-size: 4px 4px;
 }
+
+/* ── App shell ─────────────────────────────────────────────────── */
 
 .app {
   min-height: 100dvh;
@@ -33,34 +67,50 @@ body {
   flex-direction: column;
 }
 
-/* --- top bar -------------------------------------------------------------- */
+/* ── Header (topbar) ───────────────────────────────────────────── */
 
 .topbar {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: rgba(16, 17, 23, 0.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-  padding: 12px 16px 0;
-  padding-top: max(12px, env(safe-area-inset-top));
+  background: var(--bg-deep);
+  border-bottom: 3px solid var(--border);
+  box-shadow: var(--shadow-panel);
+  padding: 14px 16px 0;
+  padding-top: max(14px, env(safe-area-inset-top));
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 2px;
 }
 
 .brand h1 {
   margin: 0;
-  font-size: 19px;
-  letter-spacing: -0.01em;
+  font-family: var(--font-pixel);
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: var(--ink);
+  text-shadow: 2px 2px 0 rgba(139, 107, 82, 0.2);
+  line-height: 1.4;
 }
 
 .tagline {
   margin: 2px 0 0;
-  color: var(--muted);
-  font-size: 12px;
+  color: var(--ink-faint);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
 }
+
+/* ── Tab bar ───────────────────────────────────────────────────── */
 
 .tabs {
   display: flex;
-  gap: 6px;
+  gap: 4px;
   margin-top: 10px;
   overflow-x: auto;
   scrollbar-width: none;
@@ -71,17 +121,20 @@ body {
 }
 
 .tab {
-  flex: 0 0 auto;
-  min-height: 40px;
-  padding: 0 16px;
-  border: 1px solid var(--border);
+  flex: 1 1 0;
+  min-height: 42px;
+  padding: 0 10px;
+  border: 2px solid var(--border-light);
   border-bottom: none;
-  border-radius: 10px 10px 0 0;
-  background: transparent;
-  color: var(--muted);
-  font: inherit;
-  font-weight: 500;
+  border-radius: var(--radius-pixel) var(--radius-pixel) 0 0;
+  background: var(--panel);
+  color: var(--ink-soft);
+  font: 600 11px var(--font-pixel);
+  letter-spacing: 0.5px;
   cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  position: relative;
+  text-shadow: none;
 }
 
 .tab:focus-visible {
@@ -90,66 +143,85 @@ body {
 }
 
 .tab-on {
-  background: var(--panel-2);
+  background: var(--panel-raised);
+  color: var(--ink);
   border-color: var(--border);
-  color: var(--text);
+  border-bottom: 3px solid var(--panel-raised);
+  margin-bottom: -3px;
+  box-shadow: var(--shadow-inset);
 }
 
-/* --- layout --------------------------------------------------------------- */
+/* ── Main content area ─────────────────────────────────────────── */
 
 .main {
   flex: 1;
   width: 100%;
   max-width: 1180px;
   margin: 0 auto;
-  padding: 16px 16px 40px;
+  padding: 20px 16px 60px;
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
 }
+
+/* ── Footer ────────────────────────────────────────────────────── */
 
 .footer {
-  padding: 16px;
-  padding-bottom: max(16px, env(safe-area-inset-bottom));
-  border-top: 1px solid var(--border);
-  color: var(--muted);
-  font-size: 12px;
+  padding: 14px 16px;
+  border-top: 2px solid var(--border-light);
+  background: var(--bg-deep);
+  color: var(--ink-faint);
+  font-size: 11px;
   text-align: center;
+  padding-bottom: max(14px, env(safe-area-inset-bottom));
 }
 
-/* --- shared bits ---------------------------------------------------------- */
+/* ── Pixel-art panel (9-slice feel) ────────────────────────────── */
+
+.pixel-panel {
+  border: 3px solid var(--border);
+  border-radius: var(--radius-pixel);
+  background: var(--panel);
+  box-shadow: var(--shadow-inset), var(--shadow-panel);
+}
+
+/* ── Inputs ────────────────────────────────────────────────────── */
 
 .input {
   width: 100%;
   min-height: 44px;
   padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: var(--panel);
-  color: var(--text);
-  font: inherit;
+  border: 2px solid var(--border-light);
+  border-radius: var(--radius-pixel);
+  background: var(--panel-raised);
+  color: var(--ink);
+  font: 600 14px var(--font-body);
+  box-shadow: var(--shadow-inset);
+  transition: border-color 0.15s;
 }
 
 .input::placeholder {
-  color: #6c7488;
+  color: var(--ink-faint);
+  font-weight: 400;
 }
 
 .input:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
+  border-color: var(--accent);
 }
 
 .input-sm {
-  width: 76px;
+  width: 72px;
   min-height: 38px;
   padding: 6px 8px;
+  font-size: 13px;
 }
 
 select.input {
   appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%),
-    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
-  background-position: right 14px center, right 9px center;
-  background-size: 5px 5px, 5px 5px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0h10L5 6z' fill='%236b4c3b'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  padding-right: 30px;
+  background-position: right 12px center;
+  padding-right: 28px;
 }
 
 textarea.input {
@@ -157,106 +229,149 @@ textarea.input {
   line-height: 1.6;
 }
 
+/* ── Muted / empty / error / notice ────────────────────────────── */
+
 .muted {
-  color: var(--muted);
+  color: var(--ink-faint);
 }
 
 .empty {
-  color: var(--muted);
-  padding: 18px 0;
+  color: var(--ink-faint);
+  padding: 20px 0;
+  text-align: center;
+  font-style: italic;
 }
 
 .error {
   margin: 4px 0 16px;
   padding: 12px 14px;
-  border: 1px solid #5c2626;
-  border-radius: 10px;
-  background: #2a1416;
-  color: #ffb4b4;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 13px;
+  border: 2px solid var(--red);
+  border-radius: var(--radius-pixel);
+  background: #f5dede;
+  color: var(--red);
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  line-height: 1.6;
   word-break: break-word;
 }
 
 .notice {
   margin: 0 0 16px;
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
-  border-radius: 8px;
-  background: var(--panel);
-  color: var(--muted);
+  padding: 10px 14px;
+  border: 2px solid var(--border-light);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-pixel);
+  background: var(--panel-raised);
+  color: var(--ink-soft);
   font-size: 13px;
+  box-shadow: var(--shadow-inset);
 }
 
 .count {
-  color: var(--muted);
-  font-size: 13px;
+  color: var(--ink-faint);
+  font-size: 12px;
   margin: 14px 0;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
 .count-inline {
-  color: var(--muted);
+  color: var(--ink-faint);
   font-weight: 400;
-  font-size: 14px;
+  font-size: 13px;
 }
 
-/* --- buttons -------------------------------------------------------------- */
+/* ── Buttons ───────────────────────────────────────────────────── */
 
 .btn {
-  min-height: 44px;
-  padding: 0 16px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: var(--panel-2);
-  color: var(--text);
-  font: inherit;
-  font-weight: 500;
+  min-height: 42px;
+  padding: 0 18px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-pixel);
+  background: var(--accent);
+  color: var(--ink);
+  font: 600 12px var(--font-pixel);
+  letter-spacing: 0.5px;
   cursor: pointer;
+  box-shadow: var(--shadow-inset), var(--shadow-pixel);
+  transition: background 0.12s, transform 0.12s, box-shadow 0.12s;
 }
 
 .btn:hover {
-  border-color: #3a4053;
+  background: var(--accent-hover);
+  transform: translate(1px, 1px);
+  box-shadow: var(--shadow-inset), 1px 1px 0 0 rgba(60, 40, 30, 0.25);
+}
+
+.btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: var(--shadow-inset);
 }
 
 .btn:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--accent-deep);
   outline-offset: 2px;
 }
 
 .btn-primary {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--accent-ink);
+  background: var(--green);
+  border-color: var(--green);
+  color: var(--panel-raised);
+}
+
+.btn-primary:hover {
+  background: #5a8c4a;
+  border-color: #5a8c4a;
 }
 
 .btn-ghost {
-  background: transparent;
-  color: var(--muted);
+  background: var(--panel);
+  border-color: var(--border-light);
+  color: var(--ink-soft);
+  box-shadow: var(--shadow-inset), var(--shadow-pixel);
+}
+
+.btn-ghost:hover {
+  background: var(--bg-deep);
 }
 
 .btn-danger {
-  background: transparent;
-  border-color: #5c2b2b;
-  color: var(--danger);
+  background: var(--panel-raised);
+  border-color: var(--red);
+  color: var(--red);
+  box-shadow: var(--shadow-inset), var(--shadow-pixel);
+}
+
+.btn-danger:hover {
+  background: #f5dede;
 }
 
 .btn-icon {
   min-height: 38px;
   width: 38px;
   padding: 0;
-  background: transparent;
-  color: var(--muted);
+  background: var(--panel);
+  border-color: var(--border-light);
+  color: var(--ink-soft);
+  font-family: var(--font-body);
   font-size: 20px;
   line-height: 1;
+  box-shadow: var(--shadow-inset);
+}
+
+.btn-icon:hover {
+  background: var(--bg-deep);
+  transform: none;
 }
 
 .btn:disabled {
-  opacity: 0.45;
+  opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: var(--shadow-inset);
 }
 
-/* --- filters -------------------------------------------------------------- */
+/* ── Filter chips ──────────────────────────────────────────────── */
 
 .controls {
   display: flex;
@@ -273,13 +388,15 @@ textarea.input {
 .chip {
   min-height: 36px;
   padding: 0 12px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--panel);
-  color: var(--muted);
-  font: inherit;
-  font-size: 13px;
+  border: 2px solid var(--border-light);
+  border-radius: var(--radius-pixel);
+  background: var(--panel-raised);
+  color: var(--ink-soft);
+  font: 600 11px var(--font-pixel);
+  letter-spacing: 0.3px;
   cursor: pointer;
+  box-shadow: var(--shadow-inset);
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
 }
 
 .chip:focus-visible {
@@ -289,22 +406,25 @@ textarea.input {
 
 .chip-on {
   background: var(--accent);
-  border-color: var(--accent);
-  color: var(--accent-ink);
-  font-weight: 600;
+  border-color: var(--accent-deep);
+  color: var(--ink);
+  box-shadow: var(--shadow-inset), var(--shadow-pixel);
 }
 
 .chip-quiet {
+  font-family: var(--font-body);
   font-size: 12px;
   min-height: 32px;
 }
 
 .chip-count {
   opacity: 0.65;
+  font-family: var(--font-body);
   font-size: 11px;
+  font-weight: 700;
 }
 
-/* --- product cards -------------------------------------------------------- */
+/* ── Product cards (item-slot style) ───────────────────────────── */
 
 .cards {
   display: grid;
@@ -316,20 +436,31 @@ textarea.input {
   display: flex;
   gap: 12px;
   padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border: 3px solid var(--border);
+  border-radius: var(--radius-pixel);
   background: var(--panel);
+  box-shadow: var(--shadow-inset), var(--shadow-panel);
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 
+.card:hover {
+  border-color: var(--accent-deep);
+  box-shadow: var(--shadow-inset), 4px 4px 0 0 rgba(60, 40, 30, 0.2);
+}
+
+/* item slot — recessed frame like the game's inventory grid */
 .thumb {
   flex: 0 0 auto;
   width: 64px;
   height: 64px;
-  border-radius: 10px;
+  border: 2px solid var(--border);
+  border-radius: 2px;
   overflow: hidden;
-  background: var(--panel-2);
+  background: var(--panel-slot);
   display: grid;
   place-items: center;
+  box-shadow: inset 2px 2px 0 rgba(60, 40, 30, 0.18), inset -1px -1px 0 rgba(255, 255, 255, 0.3);
+  image-rendering: auto;
 }
 
 .thumb img {
@@ -340,9 +471,10 @@ textarea.input {
 }
 
 .thumb-ph {
-  color: #5d6579;
-  font-size: 22px;
-  font-weight: 600;
+  color: var(--ink-faint);
+  font-family: var(--font-pixel);
+  font-size: 18px;
+  opacity: 0.6;
 }
 
 .card-body {
@@ -352,22 +484,27 @@ textarea.input {
 
 .card-title {
   margin: 0;
+  font-family: var(--font-body);
   font-size: 15px;
+  font-weight: 700;
   line-height: 1.35;
+  color: var(--ink);
   letter-spacing: -0.01em;
 }
 
 .name-zh {
   margin: 3px 0 0;
-  color: var(--muted);
+  color: var(--ink-soft);
   font-size: 13px;
+  font-weight: 600;
 }
 
 .name-es {
   margin: 2px 0 0;
-  color: #7f889f;
+  color: var(--ink-faint);
   font-size: 12px;
   font-style: italic;
+  font-weight: 600;
 }
 
 .meta {
@@ -379,47 +516,55 @@ textarea.input {
 }
 
 .price {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--accent);
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  color: var(--amber);
+  text-shadow: 1px 1px 0 rgba(139, 107, 82, 0.15);
 }
 
 .unit {
+  font-family: var(--font-body);
   font-size: 11px;
-  font-weight: 400;
-  color: var(--muted);
+  font-weight: 600;
+  color: var(--ink-faint);
 }
 
 .tag {
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: var(--panel-2);
-  color: var(--muted);
+  padding: 3px 8px;
+  border: 1px solid var(--border-light);
+  border-radius: 2px;
+  background: var(--panel-raised);
+  color: var(--ink-soft);
   font-size: 11px;
+  font-weight: 700;
   white-space: nowrap;
+  box-shadow: 0 1px 0 rgba(60, 40, 30, 0.1);
 }
 
 .tag-ambient {
-  background: #2a2f3d;
-  color: #a8b0c4;
+  background: #e8d5b8;
+  border-color: var(--border-light);
+  color: var(--ink-soft);
 }
 
 .tag-chilled {
-  background: #1b2f4d;
-  color: #8fc0ff;
+  background: #d0dce8;
+  border-color: var(--blue);
+  color: var(--blue);
 }
 
 .tag-frozen {
-  background: #143338;
-  color: #79d6dd;
+  background: #d8d0e8;
+  border-color: var(--purple);
+  color: var(--purple);
 }
 
 .tag-quiet {
   background: transparent;
-  border: 1px solid var(--border);
+  border: 1px dashed var(--border-light);
 }
 
-/* --- order / recipe rows -------------------------------------------------- */
+/* ── Order / recipe expandable rows ────────────────────────────── */
 
 .orders {
   display: flex;
@@ -428,14 +573,16 @@ textarea.input {
 }
 
 .order {
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border: 3px solid var(--border);
+  border-radius: var(--radius-pixel);
   background: var(--panel);
   overflow: hidden;
+  box-shadow: var(--shadow-inset), var(--shadow-panel);
 }
 
 .order-open {
-  border-color: #3a4160;
+  border-color: var(--accent-deep);
+  box-shadow: var(--shadow-inset), 4px 4px 0 0 rgba(60, 40, 30, 0.2);
 }
 
 .order-head {
@@ -444,7 +591,7 @@ textarea.input {
   justify-content: space-between;
   gap: 12px;
   width: 100%;
-  min-height: 60px;
+  min-height: 56px;
   padding: 12px 14px;
   border: none;
   background: transparent;
@@ -452,6 +599,11 @@ textarea.input {
   font: inherit;
   text-align: left;
   cursor: pointer;
+  transition: background 0.12s;
+}
+
+.order-head:hover {
+  background: rgba(139, 107, 82, 0.06);
 }
 
 .order-head:focus-visible {
@@ -466,17 +618,20 @@ textarea.input {
 }
 
 .order-no {
-  font-size: 15px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  line-height: 1.6;
+  color: var(--ink);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .order-sub {
-  color: var(--muted);
+  color: var(--ink-faint);
   font-size: 12px;
+  font-weight: 600;
+  margin-top: 2px;
 }
 
 .order-total {
@@ -484,18 +639,22 @@ textarea.input {
   align-items: center;
   gap: 10px;
   flex: 0 0 auto;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  color: var(--amber);
+  text-shadow: 1px 1px 0 rgba(139, 107, 82, 0.12);
 }
 
 .chev {
-  color: var(--muted);
+  color: var(--ink-faint);
+  font-family: var(--font-body);
   font-size: 10px;
 }
 
 .order-body {
   padding: 0 14px 14px;
-  border-top: 1px solid var(--border);
+  border-top: 2px solid var(--border-light);
+  background: var(--panel-raised);
 }
 
 .facts {
@@ -514,23 +673,27 @@ textarea.input {
 }
 
 .fact dt {
-  color: var(--muted);
-  font-size: 11px;
+  color: var(--ink-faint);
+  font-family: var(--font-pixel);
+  font-size: 8px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 1px;
+  line-height: 1.5;
 }
 
 .fact dd {
-  margin: 2px 0 0;
+  margin: 3px 0 0;
   font-size: 14px;
+  font-weight: 600;
   word-break: break-word;
+  color: var(--ink);
 }
 
 .lines {
   list-style: none;
   margin: 0;
   padding: 0;
-  border-top: 1px solid var(--border);
+  border-top: 2px solid var(--border-light);
 }
 
 .line {
@@ -539,7 +702,7 @@ textarea.input {
   justify-content: space-between;
   gap: 12px;
   padding: 9px 0;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-light);
   font-size: 14px;
 }
 
@@ -549,53 +712,66 @@ textarea.input {
 
 .line-name {
   min-width: 0;
+  font-weight: 600;
+  color: var(--ink);
 }
 
 .line-spec {
   display: block;
-  color: var(--muted);
+  color: var(--ink-faint);
   font-size: 12px;
+  font-weight: 400;
 }
 
 .line-calc {
   flex: 0 0 auto;
   display: flex;
   gap: 8px;
-  color: var(--muted);
+  color: var(--ink-faint);
   font-variant-numeric: tabular-nums;
   font-size: 13px;
+  font-weight: 600;
 }
 
 .line-sum {
-  color: var(--text);
-  font-weight: 600;
+  color: var(--amber);
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  text-shadow: 1px 1px 0 rgba(139, 107, 82, 0.1);
 }
 
 .notes {
   margin: 12px 0 0;
   padding: 12px;
-  border-radius: 10px;
-  background: var(--panel-2);
-  color: #c8cee0;
+  border: 2px solid var(--border-light);
+  border-radius: var(--radius-pixel);
+  background: var(--panel);
+  color: var(--ink-soft);
   font-size: 14px;
   white-space: pre-wrap;
+  box-shadow: var(--shadow-inset);
 }
 
-/* --- tools (recipe / plan) ------------------------------------------------ */
+/* ── Tool bar (recipe / plan) ──────────────────────────────────── */
 
 .tool-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .tool-title {
   margin: 0;
-  font-size: 20px;
-  letter-spacing: -0.01em;
+  font-family: var(--font-pixel);
+  font-size: 14px;
+  color: var(--ink);
+  text-shadow: 2px 2px 0 rgba(139, 107, 82, 0.15);
+  line-height: 1.5;
 }
+
+/* ── Form (recipe builder) ─────────────────────────────────────── */
 
 .form {
   display: flex;
@@ -611,10 +787,12 @@ textarea.input {
 }
 
 .field > span {
-  color: var(--muted);
-  font-size: 12px;
+  color: var(--ink-faint);
+  font-family: var(--font-pixel);
+  font-size: 9px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 1px;
+  line-height: 1.5;
 }
 
 .field-row {
@@ -632,9 +810,10 @@ textarea.input {
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+  margin-top: 4px;
 }
 
-/* --- picker --------------------------------------------------------------- */
+/* ── Product picker ────────────────────────────────────────────── */
 
 .picker-list {
   list-style: none;
@@ -642,9 +821,10 @@ textarea.input {
   padding: 4px;
   max-height: 264px;
   overflow-y: auto;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: var(--panel-2);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-pixel);
+  background: var(--panel-raised);
+  box-shadow: var(--shadow-inset), var(--shadow-panel);
 }
 
 .picker-item {
@@ -656,17 +836,18 @@ textarea.input {
   min-height: 46px;
   padding: 8px 10px;
   border: none;
-  border-radius: 8px;
+  border-radius: 2px;
   background: transparent;
   color: inherit;
   font: inherit;
   text-align: left;
   cursor: pointer;
+  transition: background 0.1s;
 }
 
 .picker-item:hover,
 .picker-item:focus-visible {
-  background: #2a2f3d;
+  background: var(--accent-glow);
   outline: none;
 }
 
@@ -677,30 +858,34 @@ textarea.input {
 }
 
 .picker-name {
+  font-weight: 700;
+  color: var(--ink);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .picker-sub {
-  color: var(--muted);
+  color: var(--ink-faint);
   font-size: 12px;
+  font-weight: 600;
 }
 
 .picker-price {
   flex: 0 0 auto;
-  color: var(--accent);
-  font-size: 13px;
-  font-variant-numeric: tabular-nums;
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  color: var(--amber);
 }
 
 .picker-empty {
   padding: 10px;
-  color: var(--muted);
+  color: var(--ink-faint);
   font-size: 13px;
+  font-style: italic;
 }
 
-/* --- editable rows -------------------------------------------------------- */
+/* ── Editable rows (ingredient / plan items) ───────────────────── */
 
 .rows {
   list-style: none;
@@ -714,34 +899,39 @@ textarea.input {
   align-items: center;
   gap: 8px;
   padding: 10px 0;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 2px solid var(--border-light);
 }
 
 .row-name {
   flex: 1 1 100%;
   min-width: 0;
   font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
   overflow-wrap: anywhere;
 }
 
 .row-sub {
   display: block;
-  color: var(--muted);
+  color: var(--ink-faint);
   font-size: 12px;
+  font-weight: 600;
 }
 
 .row-unit {
-  color: var(--muted);
-  font-size: 13px;
+  color: var(--ink-faint);
+  font-family: var(--font-pixel);
+  font-size: 9px;
   min-width: 20px;
 }
 
 .row-total {
   min-width: 62px;
   text-align: right;
-  font-size: 14px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  color: var(--amber);
+  text-shadow: 1px 1px 0 rgba(139, 107, 82, 0.1);
 }
 
 .row-done .row-name,
@@ -753,53 +943,141 @@ textarea.input {
 .check {
   width: 20px;
   height: 20px;
-  accent-color: var(--accent);
+  accent-color: var(--green);
 }
+
+/* ── Summary panel ─────────────────────────────────────────────── */
 
 .summary {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
   margin-top: 16px;
-  padding: 14px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--panel);
+  padding: 16px;
+  border: 3px solid var(--border);
+  border-radius: var(--radius-pixel);
+  background: var(--panel-raised);
+  box-shadow: var(--shadow-inset), var(--shadow-panel);
 }
 
 .summary > div {
   flex: 1 1 120px;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
 .summary-label {
-  color: var(--muted);
-  font-size: 11px;
+  color: var(--ink-faint);
+  font-family: var(--font-pixel);
+  font-size: 8px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 1px;
+  line-height: 1.5;
 }
 
 .summary-value {
-  font-size: 19px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
+  font-family: var(--font-pixel);
+  font-size: 14px;
+  color: var(--amber);
+  text-shadow: 1px 1px 0 rgba(139, 107, 82, 0.12);
 }
 
-/* --- wider screens -------------------------------------------------------- */
+/* ── Pixel-art decorations ─────────────────────────────────────── */
 
-/* On phones the four tabs are made to share the row rather than scroll, so no
-   section can end up hidden off the right edge. */
-@media (max-width: 559px) {
-  .tab {
-    flex: 1 1 auto;
-    min-width: 0;
-    padding: 0 10px;
-    font-size: 14px;
-    text-align: center;
-  }
+/* Small house */
+.pixel-house {
+  width: 28px;
+  height: 24px;
+  image-rendering: pixelated;
+  flex-shrink: 0;
 }
+
+/* Small flower divider between sections */
+.pixel-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 0;
+  color: var(--border-light);
+}
+
+.pixel-divider::before,
+.pixel-divider::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background: var(--border-light);
+  border-radius: 1px;
+}
+
+/* Small decorative element in brand area */
+.brand-sprites {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.sprite {
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
+
+.sprite-sm {
+  width: 20px;
+  height: 20px;
+}
+
+.sprite-md {
+  width: 28px;
+  height: 28px;
+}
+
+.sprite-lg {
+  width: 36px;
+  height: 36px;
+}
+
+/* Header decorative strip */
+.header-decor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 0 2px;
+  opacity: 0.7;
+}
+
+.header-decor .sprite {
+  width: 16px;
+  height: 16px;
+}
+
+/* Section heading with sprite */
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
+}
+
+.section-heading .sprite {
+  width: 22px;
+  height: 22px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-family: var(--font-pixel);
+  font-size: 13px;
+  color: var(--ink);
+  text-shadow: 2px 2px 0 rgba(139, 107, 82, 0.15);
+  line-height: 1.5;
+}
+
+/* ── Responsive: wider screens ─────────────────────────────────── */
 
 @media (min-width: 560px) {
   .row-name {
@@ -809,6 +1087,11 @@ textarea.input {
   .facts {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
+  .tab {
+    flex: 0 1 auto;
+    padding: 0 18px;
+  }
 }
 
 @media (min-width: 720px) {
@@ -817,7 +1100,11 @@ textarea.input {
   }
 
   .brand h1 {
-    font-size: 22px;
+    font-size: 15px;
+  }
+
+  .tool-title {
+    font-size: 16px;
   }
 }
 
@@ -827,6 +1114,19 @@ textarea.input {
   }
 
   .main {
-    padding: 24px 24px 56px;
+    padding: 28px 24px 64px;
+  }
+}
+
+/* ── Mobile: tabs share row equally ────────────────────────────── */
+
+@media (max-width: 559px) {
+  .tab {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0 8px;
+    font-size: 9px;
+    text-align: center;
+    letter-spacing: 0;
   }
 }
