@@ -66,6 +66,12 @@ export function thumbUrl(url, size = 160) {
   return `/.netlify/images?url=${encodeURIComponent(url)}&w=${size}&h=${size}&fit=cover&position=top&q=78`;
 }
 
+/** Larger, uncropped rendition for detail views. */
+export function largeUrl(url, width = 800) {
+  if (!url) return null;
+  return `/.netlify/images?url=${encodeURIComponent(url)}&w=${width}&q=82`;
+}
+
 /** Normalised storage value (常温 / 冷藏 / 冷冻) or null. */
 export function storage(fields) {
   const value = fields["存储方式"];
